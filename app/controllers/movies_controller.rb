@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = Movie.list_ratings
     query_args = {}
     unless params[:sort].nil?
       case
