@@ -8,6 +8,11 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.list_ratings
+    unless params[:ratings].nil?
+      @current_ratings = params[:ratings].keys
+    else
+      @current_ratings = []
+    end 
     query_args = {}
     unless params[:sort].nil?
       case
@@ -19,7 +24,11 @@ class MoviesController < ApplicationController
           query_args[:order] = "release_date ASC"
       end
     end 
-    @movies = Movie.all(query_args)
+    if @current_ratings.length > 0
+      @movies = Movie.where(:rating => @current_ratings).order(query_args[:order])
+    else
+      @movies = Movie.all(query_args)
+    end
   end
 
   def new
