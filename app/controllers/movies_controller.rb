@@ -7,6 +7,22 @@ class MoviesController < ApplicationController
   end
 
   def index
+    if params[:sort].nil?
+      unless session[:sort].nil?
+        redirect_to movies_path(request.parameters.merge( {:sort => session[:sort]} ))
+        return
+      end 
+    else
+      session[:sort] = params[:sort] 
+    end
+    if params[:ratings].nil?
+      unless session[:ratings].nil?
+        redirect_to movies_path(request.parameters.merge( {:ratings => session[:ratings]} ))
+        return
+      end 
+    else
+      session[:ratings] = params[:ratings] 
+    end
     @all_ratings = Movie.list_ratings
     unless params[:ratings].nil?
       @current_ratings = params[:ratings].keys
